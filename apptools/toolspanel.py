@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from kivy.lang import Builder
 from  kivy.core.window import Window
-from kivymd.elevationbehavior import ElevationBehavior
+from kivymd.elevationbehavior import RectangularElevationBehavior
 from kivymd.theming import ThemableBehavior
 
 from apptools.verticalslider import VerticalSlidingPanel
@@ -18,7 +18,7 @@ Builder.load_string('''
 ''')
 
 
-class ToolsPanel(VerticalSlidingPanel, ThemableBehavior, ElevationBehavior):
+class ToolsPanel(VerticalSlidingPanel, ThemableBehavior, RectangularElevationBehavior):
 
     def resize(self, obj, width, height):
         self.y = Window.height if self.side == 'up' else -1 * self.height

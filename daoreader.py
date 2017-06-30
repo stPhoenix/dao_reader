@@ -7,7 +7,7 @@ import os, copy, time, random
 from concurrent.futures import ThreadPoolExecutor
 import csv
 from memory_profiler import profile
-from kivymd.navigationdrawer import NavigationDrawer
+from kivymd.navigationdrawer import MDNavigationDrawer, NavigationLayout
 import kivy
 from kivy.graphics import *
 kivy.require('1.9.1')
@@ -41,7 +41,7 @@ from kivybooks.fb2 import FB2Parser
 from apptools.toolspanel import ToolsPanel
 
 #############################
-class Main(BoxLayout):
+class Main(NavigationLayout):
     books = []
 
     def __init__(self, **kwargs):
@@ -97,12 +97,12 @@ class Main(BoxLayout):
         elif key == 'font_size':
             self.font_size = int(value)
 
-        if key == 'bg_color':
-            App.get_running_app().nav_drawer.ids.fcolor.text = 'Колір фону: %s' % value
-        elif key == 'font_size':
-            App.get_running_app().nav_drawer.ids.fsize.text = 'Розмір кегля: %s' % value
-        elif key == 'font':
-            App.get_running_app().nav_drawer.ids.font.text = 'Кегель: %s' % value
+        # if key == 'bg_color':
+        #     App.get_running_app().nav_drawer.ids.fcolor.text = 'Колір фону: %s' % value
+        # elif key == 'font_size':
+        #     App.get_running_app().nav_drawer.ids.fsize.text = 'Розмір кегля: %s' % value
+        # elif key == 'font':
+        #     App.get_running_app().nav_drawer.ids.font.text = 'Кегель: %s' % value
 
     def add_book(self):
         self.dialog = MDDialog(title="Add book",
@@ -303,7 +303,7 @@ class Main(BoxLayout):
             self = App.get_running_app().root
             unbind_all(self)
             self.ids.scr_mng.current = 'main_screen'
-            self.tpanel.toggle()
+            self.tpanel.toggle_nav_drawer()
 
         def update_text(widget, *largs, **kwargs):
             #self = App.get_running_app().root
@@ -612,9 +612,9 @@ class MainApp(App):
 
     def build(self):
         self.nav_drawer = AppNavDraw()
-        self.nav_drawer.ids.fcolor.text = 'Колір фону: %s' % self.config.get('section1', 'bg_color')
-        self.nav_drawer.ids.fsize.text = 'Розмір кегля: %s' % self.config.get('section1', 'font_size')
-        self.nav_drawer.ids.font.text = 'Кегель: %s' % self.config.get('section1', 'font')
+#        self.nav_drawer.ids.fcolor.text = 'Колір фону: %s' % self.config.get('section1', 'bg_color')
+ #       self.nav_drawer.ids.fsize.text = 'Розмір кегля: %s' % self.config.get('section1', 'font_size')
+  #      self.nav_drawer.ids.font.text = 'Кегель: %s' % self.config.get('section1', 'font')
         return Main()
 
 
@@ -651,7 +651,7 @@ class MenuItem(MDMenuItem):
         App.get_running_app().root.config_changes(self.key, self.text)
 
 #########################################
-class AppNavDraw(NavigationDrawer):
+class AppNavDraw(MDNavigationDrawer):
 
     def add_widget(self, widget, index=0):
         if issubclass(widget.__class__, BaseListItem):
@@ -670,7 +670,7 @@ class TPanel(ToolsPanel):
 
 
 ###########################################
-class BookNavDraw(NavigationDrawer):
+class BookNavDraw(MDNavigationDrawer):
     pass
 
 

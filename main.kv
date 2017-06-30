@@ -1,11 +1,12 @@
 #:import Toolbar kivymd.toolbar.Toolbar
-#:import NavigationDrawer kivymd.navigationdrawer.NavigationDrawer
+#:import MDNavigationDrawer kivymd.navigationdrawer.MDNavigationDrawer
 #:import MDLabel kivymd.label.MDLabel
 #:import MDSlider kivymd.slider.MDSlider
-#:import SingleLineTextField kivymd.textfields.SingleLineTextField
+#:import MDTextField kivymd.textfields.MDTextField
 #:import MDIconButton kivymd.button.MDIconButton
 #:import MDDropdownMenu kivymd.menu.MDDropdownMenu
 #:import Clock kivy.clock.Clock
+#:import NavigationLayout kivymd.navigationdrawer.NavigationLayout
 
 <BookImage>:
 
@@ -47,7 +48,7 @@
             value: root.value
             size_hint: 0.5, 0.5
             on_active: root.new_page = self.value if self.active is True else root.new_page
-        SingleLineTextField:
+        MDTextField:
             id: page_textfield
             size_hint: 0.04, 0.5
             #height: book_slider.height
@@ -59,7 +60,7 @@
             size_hint_y: 0.5
             #padding: (0, 0, 0, 0)
             icon: 'settings'
-            on_release: app.nav_drawer.toggle(); root.toggle()
+            on_release: app.root.toggle_nav_drawer(); root.toggle()
         MDIconButton:
             id: iconn
             theme_text_color: 'Secondary'
@@ -67,30 +68,6 @@
             size_hint_y: 0.5
             #padding: (0, 0, 0, 0)
             icon: 'home'
-
-
-<AppNavDraw>:
-    title: 'Налаштування'
-    NavigationDrawerIconButton:
-        id: fsize
-        icon: 'format-size'
-        text: "Format size"
-        on_release: MDDropdownMenu(items=app.root.build_menu('font_size'), width_mult=4).open(self)
-    NavigationDrawerIconButton:
-        id: font
-        icon: 'font'
-        text: "Font"
-        on_release: MDDropdownMenu(items=app.root.build_menu('font'), width_mult=4).open(self)
-    NavigationDrawerIconButton:
-        id: fcolor
-        icon: 'format-color-fill'
-        text: "Background"
-        on_release: MDDropdownMenu(items=app.root.build_menu('bg_color'), width_mult=4).open(self)
-    NavigationDrawerIconButton:
-        id: nchange
-        icon: 'chevron-right'
-        text: "Підтвердити"
-
 <BookNavDraw>:
     title: 'Book'
 
@@ -136,75 +113,102 @@
 #                    size:self.size
 #                    pos:self.pos
 <Main>:
-    orientation: 'vertical'
-    ScreenManager:
-        id: scr_mng
-        Screen:
-            name: 'main_screen'
-            id: main_screen
-            StackLayout:
-                spacing: dp(10)
-                Toolbar:
-                    title: 'Читай із задоволенням'
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    left_action_items: [['menu', lambda x: app.nav_drawer.toggle()]]
-                    right_action_items: [['collection-plus', lambda x: root.add_book()], ['settings', lambda x: app.nav_drawer.toggle()]]
+    id: nav_lay
+    MDNavigationDrawer:
+        NavigationDrawerToolbar:
+            title: 'Налаштування'
+        NavigationDrawerIconButton:
+            id: fsize
+            icon: 'format-size'
+            text: "Format size"
+            on_release: MDDropdownMenu(items=app.root.build_menu('font_size'), width_mult=4).open(self)
+        NavigationDrawerIconButton:
+            id: font
+            icon: 'format-text'
+            text: "Font"
+            on_release: MDDropdownMenu(items=app.root.build_menu('font'), width_mult=4).open(self)
+        NavigationDrawerIconButton:
+            id: fcolor
+            icon: 'format-color-fill'
+            text: "Background"
+            on_release: MDDropdownMenu(items=app.root.build_menu('bg_color'), width_mult=4).open(self)
+        NavigationDrawerIconButton:
+            id: nchange
+            icon: 'chevron-right'
+            text: "Підтвердити"
+    BoxLayout:
+        orientation: 'vertical'
+        ScreenManager:
+            id: scr_mng
+            Screen:
+                name: 'main_screen'
+                id: main_screen
+                StackLayout:
+                    spacing: dp(10)
+                    Toolbar:
+                        title: 'Читай із задоволенням'
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        left_action_items: [['menu', lambda x: app.root.toggle_nav_drawer()]]
+                        right_action_items: [['plus', lambda x: root.add_book()], ['settings', lambda x: app.root.toggle_nav_drawer()]]
+                        md_bg_color: app.theme_cls.primary_color
+                        background_palette: 'Primary'
+                        background_hue: '500'
 #                    canvas:
 #                        Color:
 #                            rgba: app.theme_cls.primary_color
 #                        Rectangle:
 #                            pos: self.pos
 #                            size: self.size
-                MDLabel:
-                    text: 'Останні прочитані'
-                    #font_size: sp(20)
-                    font_style: 'Headline'
-                    theme_text_color: 'Secondary'
-                    size_hint_y: None
-                    padding: dp(25), dp(15)
-                    height: self.font_size
-                    canvas:
-                        Color:
-                            rgba: app.theme_cls.divider_color
-                        Line:
-                            points: (self.x+dp(20)),(self.y-dp(5)), (self.x+self.texture_size[0])*.95,self.y
-                ScrollView:
-                    do_scroll_y: False
-                    size_hint_y: None
-                    height: dp(190)
+                    MDLabel:
+                        text: 'Останні прочитані'
+                        #font_size: sp(20)
+                        font_style: 'Headline'
+                        theme_text_color: 'Secondary'
+                        size_hint_y: None
+                        padding: dp(25), dp(15)
+                        height: self.font_size
+                        canvas:
+                            Color:
+                                rgba: app.theme_cls.divider_color
+                            Line:
+                                points: (self.x+dp(20)),(self.y-dp(5)), (self.x+self.texture_size[0])*.95,self.y
+                    ScrollView:
+                        do_scroll_y: False
+                        size_hint_y: None
+                        height: dp(190)
 #                    canvas:
 #                        Color:
 #                            rgba: app.theme_cls.divider_color
 #                        Rectangle:
 #                            pos:self.pos
 #                            size: self.size
-                    GridLayout:
-                        id: recent_read
-                        rows: 1
-                        size_hint_y: None
-                        size_hint_x: None
+                        GridLayout:
+                            id: recent_read
+                            rows: 1
+                            size_hint_y: None
+                            size_hint_x: None
                         #orientation: 'horizontal'
-                        spacing: dp(10)
-                        padding: dp(25), dp(5)
-                        height: dp(190)
-                        width: self.minimum_width
+                            spacing: dp(10)
+                            padding: dp(25), dp(5)
+                            height: dp(190)
+                            width: self.minimum_width
                         #CoverPage:
 
-                MDLabel:
-                    text: 'Книги'
+                    MDLabel:
+                        text: 'Книги'
                     #font_size: sp(20)
-                    font_style: 'Headline'
-                    theme_text_color: 'Secondary'
-                    size_hint_y: None
-                    padding: dp(25), dp(15)
-                    height: self.font_size
-                    canvas:
-                        Color:
-                            rgba: app.theme_cls.divider_color
-                        Line:
-                            points: (self.x+dp(20)),(self.y-dp(5)), (self.x+self.texture_size[0])*.95,self.y
-                ScrollView:
-                    do_scroll_x: False
+                        font_style: 'Headline'
+                        theme_text_color: 'Secondary'
+                        size_hint_y: None
+                        padding: dp(25), dp(15)
+                        height: self.font_size
+                        canvas:
+                            Color:
+                                rgba: app.theme_cls.divider_color
+                            Line:
+                                points: (self.x+dp(20)),(self.y-dp(5)), (self.x+self.texture_size[0])*.95,self.y
+                    ScrollView:
+                        do_scroll_x: False
                     #size_hint_x: 1
                     #height: dp(190)
                     #size_hint_y: None
@@ -214,20 +218,20 @@
 #                        Rectangle:
 #                            pos:self.pos
 #                            size: self.size
-                    GridLayout:
-                        id: book_shelf
-                        cols: int(self.width / 140)
+                        GridLayout:
+                            id: book_shelf
+                            cols: int(self.width / 140)
                         #size_hint: None, None
-                        size_hint_y: None
-                        spacing: dp(10)
-                        padding: dp(25), dp(5)
-                        height: self.minimum_height
+                            size_hint_y: None
+                            spacing: dp(10)
+                            padding: dp(25), dp(5)
+                            height: self.minimum_height
                         #width: dp(500)
 
 
 
-        Screen:
-            name: 'reader_screen'
-            id: reader_screen
-            RScreen:
-                id: reader_screen_swipes
+            Screen:
+                name: 'reader_screen'
+                id: reader_screen
+                RScreen:
+                    id: reader_screen_swipes
