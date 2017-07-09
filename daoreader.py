@@ -296,7 +296,7 @@ class Main(NavigationLayout):
             self.ids.reader_screen_swipes.unbind(on_wheel_up_to_down=turn_page_forward)
             self.ids.reader_screen_swipes.unbind(on_wheel_down_to_up=turn_page_backward)
             self.ids.reader_screen_swipes.unbind(on_up_to_down_line=toggle)
-            App.get_running_app().nav_drawer.ids.nchange.unbind(on_release=update_text)
+            self.ids.nchange.unbind(on_release=update_text)
             Window.unbind(on_resize=resize)
             del book, pages_counter, sm, pages, last_page, new_page, counter, title_font_size
             #del book
@@ -305,7 +305,7 @@ class Main(NavigationLayout):
             self = App.get_running_app().root
             unbind_all(self)
             self.ids.scr_mng.current = 'main_screen'
-            self.tpanel.toggle_nav_drawer()
+            self.tpanel.toggle()
 
         def update_text(widget, *largs, **kwargs):
             #self = App.get_running_app().root
@@ -345,7 +345,7 @@ class Main(NavigationLayout):
         self.ids.reader_screen_swipes.bind(on_wheel_up_to_down=turn_page_forward)
         self.ids.reader_screen_swipes.bind(on_wheel_down_to_up=turn_page_backward)
         self.ids.reader_screen_swipes.bind(on_up_to_down_line=toggle)
-        App.get_running_app().nav_drawer.ids.nchange.bind(on_release=update_text)
+        self.ids.nchange.bind(on_release=update_text)
         Window.bind(on_resize=resize)
 
     def build_menu(self, key):
