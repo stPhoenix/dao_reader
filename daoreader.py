@@ -54,7 +54,7 @@ class Main(NavigationLayout):
         self.bg_color = None
         self.text_color = None
         self.config_changes('bg_color', self.config.get('section1', 'bg_color'))
-       # self.ids.scr_mng.current = 'main_screen'
+        #self.ids.scr_mng.current = 'load_dialog'
         App.get_running_app().bind(on_stop=self.write_books)
         Window.bind(on_draw=self.load_saved)
 
@@ -105,30 +105,32 @@ class Main(NavigationLayout):
         #     App.get_running_app().nav_drawer.ids.font.text = 'Кегель: %s' % value
 
     def add_book(self):
-        self.dialog = MDDialog(title="Add book",
-                               content=LoadDialog(),
-                               #size_hint=(.8, None),
-                               #height=dp(200),
-                               auto_dismiss=False)
-
-        self.dialog.add_action_button("Dismiss",
-                                      action=lambda
-                                          *x: self.dialog.dismiss())
-        #self.dialog.add_action_button('Load', lambda x: )
-        self.dialog.open()
+        # content = LoadDialog()
+        # self.dialog = MDDialog(title="Add book",
+        #                        content=content,
+        #                        #size_hint=(.8, None),
+        #                        #height=dp(200),
+        #                        auto_dismiss=False)
+        #
+        # self.dialog.add_action_button("Dismiss",
+        #                               action=lambda x: self.dialog.dismiss())
+        # self.dialog.add_action_button('Load', lambda x: )
+        # self.dialog.open()
+        self.ids.scr_mng.current = 'load_dialog'
 
     def load_file(self, path, selection):
         if selection is not None and selection != []:
-            self.dialog.dismiss()
+            #self.dialog.dismiss()
+            self.ids.scr_mng.current = 'main_screen'
             Clock.schedule_once(lambda dt: self.executor.submit(self.load_book(os.path.join(path, selection[0]))), 1)
 
         else:
             content = MDLabel(font_style='Body1',
                               theme_text_color='Secondary',
-                              text="Please choose a book!",
-                              valign='top')
+                              text="Please choose a book!")
+                              #valign='center')
 
-            content.bind(size=content.setter('text_size'))
+            #content.bind(size=content.setter('text_size'))
             error_dialog = MDDialog(title='NO BOOK CHOOSE',
                                     content=content,
                                     size_hint=(.3, .3),

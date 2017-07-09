@@ -130,6 +130,9 @@
                 id: reader_screen
                 RScreen:
                     id: reader_screen_swipes
+            Screen:
+                name: 'load_dialog'
+                LoadDialog:
 <BookImage>:
 
 #    canvas:
@@ -158,6 +161,9 @@
             Button:
                 text: "Load"
                 on_release: app.root.load_file(filechooser.path, filechooser.selection)
+            Button:
+                text: "Dismiss"
+                on_release: app.root.ids.scr_mng.current = 'main_screen'
 <TPanel>:
     icon: iconn
     height: dp(90)
