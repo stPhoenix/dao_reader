@@ -33,14 +33,13 @@ from kivymd.dialog import MDDialog
 from kivymd.label import MDLabel
 from kivymd.list import BaseListItem
 from kivymd.menu import MDMenuItem
-from kivymd.spinner import MDSpinner
 
 from apptools import sett
 from apptools.gesture_box import GestureBox as Gesture
 from kivybooks.fb2 import FB2Parser
 from apptools.toolspanel import ToolsPanel
 
-#############################
+
 class Main(NavigationLayout):
     books = []
 
@@ -362,10 +361,6 @@ class Main(NavigationLayout):
         return items
 
 
-#######################
-
-
-#########################################
 class Book:
     def __init__(self, path, font_size, text_color, lindex):
         self.__pages = []
@@ -594,7 +589,6 @@ class Book:
         return self.__path
 
 
-#########################################
 class MainApp(App):
     theme_cls = ThemeManager()
     # settings_cls = AppSettings
@@ -620,7 +614,6 @@ class MainApp(App):
         return Main()
 
 
-##########################
 class CoverPage(ButtonBehavior, RectangularRippleBehavior, FloatLayout):
     text = ObjectProperty()
     texture = ObjectProperty()
@@ -633,7 +626,7 @@ class CoverPage(ButtonBehavior, RectangularRippleBehavior, FloatLayout):
      #   print('click')
 
 
-##############################################
+
 class BookImage(Image):
     w = NumericProperty()
     h = NumericProperty()
@@ -645,14 +638,15 @@ class BookImage(Image):
         self.height = self.h
         self.texture = texture
         super(BookImage, self).__init__()
-############################################
+
+
 class MenuItem(MDMenuItem):
     key = StringProperty()
 
     def on_release(self):
         App.get_running_app().root.config_changes(self.key, self.text)
 
-#########################################
+
 class AppNavDraw(MDNavigationDrawer):
 
     def add_widget(self, widget, index=0):
@@ -662,7 +656,7 @@ class AppNavDraw(MDNavigationDrawer):
             super(AppNavDraw, self).add_widget(widget, index)
 
 
-##########################################
+
 class TPanel(ToolsPanel):
     max = NumericProperty(100)
     text = StringProperty('1/2000')
@@ -671,24 +665,18 @@ class TPanel(ToolsPanel):
     icon = ObjectProperty()
 
 
-###########################################
+
 class BookNavDraw(MDNavigationDrawer):
     pass
 
 
-#################################
+
 class RScreen(Gesture):
     pass
-
-##########################################
 
 
 class LoadDialog(BoxLayout):
     pass
-
-#########################################
-
-
 
 
 if __name__ == '__main__':
